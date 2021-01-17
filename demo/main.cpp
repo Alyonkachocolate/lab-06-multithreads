@@ -8,9 +8,10 @@ int main(int argc, char *argv[]) {
   init();
   srand(time(NULL));
   std::signal(SIGINT, signalHandler);
+  std::signal(SIGABRT, signalHandler);
+  std::signal(SIGTERM, signalHandler);
 
   std::vector<std::thread> threads;
-  threads.reserve(threadCount);
 
   for (size_t i = 0; i < threadCount; i++) {
     threads.emplace_back(FindHash);

@@ -40,28 +40,19 @@ add_executable(tests
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
         )
 
-#add_executable(main
-#        ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp
-#        )
-
 add_executable(demo
         ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp
         )
 
 target_link_libraries(demo ${PROJECT_NAME})
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-        "$<INSTALL_INTERFACE:include>"
+target_include_directories(${PROJECT_NAME}
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         )
 
 target_include_directories(tests
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         )
-
-#target_include_directories(main
-#        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-#        )
 
 target_include_directories(demo
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -71,7 +62,6 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS}
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third-party>")
 
 target_link_libraries(tests GTest::gtest_main ${PROJECT_NAME})
-#target_link_libraries(main ${PROJECT_NAME} ${Boost_LIBRARIES})
 
 target_link_libraries(demo ${PROJECT_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}
