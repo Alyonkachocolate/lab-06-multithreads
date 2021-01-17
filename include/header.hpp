@@ -77,8 +77,9 @@ void AddToJson(const size_t &timestamp, const std::string &hash,
 
     // for <{XXX}000> hash
     if (hash.substr(60, 4) == "0000") {
-      BOOST_LOG_TRIVIAL(info) << " FOUND! " << randomString << " " << hash
-                              << ' ' << loging::aux::this_thread::get_id() << '\n';
+      BOOST_LOG_TRIVIAL(info)
+          << " FOUND! " << randomString << " " << hash << ' '
+          << loging::aux::this_thread::get_id() << '\n';
       AddToJson(std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::system_clock::now().time_since_epoch())
                     .count(),
@@ -107,12 +108,24 @@ void init() {
   loging::add_file_log(backend);
   loging::add_console_log(std::cout, keywords::format = g_format);
 
-  loging::core::get()->set_filter(loging::trivial::severity >= loging::trivial::trace);
+  loging::core::get()->set_filter(loging::trivial::severity >=
+                                  loging::trivial::trace);
 }
 
 void signalHandler(int) {
   std::ofstream out(outputFile);
-  out << data;
+  out << "[\n";
+  for (size_t i = 0; i < data.size(); i++) {
+    json d = data.at(i);
+    out << "    {" << std::endl;
+    out << "        \"data\" : " << d["data"] << "," << std::endl;
+    out << "        \"hash\" : " << d["hash"] << "," << std::endl;
+    out << "        \"timestamp\": " << d["timestamp"] << std::endl;
+    out << "    }";
+    if (i != data.size() - 1) out << ",";
+    out << "\n";
+  }
+  out << "]\n";
   out.close();
   std::cout << "File successfully created\n";
   exit(0);

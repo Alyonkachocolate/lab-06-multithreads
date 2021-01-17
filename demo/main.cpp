@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
   std::signal(SIGTERM, signalHandler);
 
   std::vector<std::thread> threads;
+  threads.reserve(threadCount);
 
   for (size_t i = 0; i < threadCount; i++) {
     threads.emplace_back(FindHash);
