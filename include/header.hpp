@@ -24,7 +24,7 @@
 #include <thread>
 #include <vector>
 
-namespace log = boost::log;
+namespace loging = boost::log;
 namespace sources = boost::log::sources;
 namespace sinks = boost::log::sinks;
 namespace keywords = boost::log::keywords;
@@ -78,7 +78,7 @@ void AddToJson(const size_t &timestamp, const std::string &hash,
     // for <{XXX}000> hash
     if (hash.substr(60, 4) == "0000") {
       BOOST_LOG_TRIVIAL(info) << " FOUND! " << randomString << " " << hash
-                              << ' ' << log::aux::this_thread::get_id() << '\n';
+                              << ' ' << loging::aux::this_thread::get_id() << '\n';
       AddToJson(std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::system_clock::now().time_since_epoch())
                     .count(),
@@ -88,9 +88,9 @@ void AddToJson(const size_t &timestamp, const std::string &hash,
 }
 
 void init() {
-  boost::shared_ptr<log::core> core = log::core::get();
+  boost::shared_ptr<loging::core> core = loging::core::get();
 
-  log::add_common_attributes();
+  loging::add_common_attributes();
   boost::shared_ptr<backend_type> backend =
       boost::make_shared<sinks::text_file_backend>(
           keywords::file_name = "file_%5N.log",
@@ -102,12 +102,12 @@ void init() {
               sinks::file::rotation_at_time_point(1, 0, 0));
 
   boost::shared_ptr<sink_type> sink(new sink_type(backend));
-  sink->set_formatter(log::parse_formatter(g_format));
+  sink->set_formatter(loging::parse_formatter(g_format));
   core->add_sink(sink);
-  log::add_file_log(backend);
-  log::add_console_log(std::cout, keywords::format = g_format);
+  loging::add_file_log(backend);
+  loging::add_console_log(std::cout, keywords::format = g_format);
 
-  log::core::get()->set_filter(log::trivial::severity >= log::trivial::trace);
+  loging::core::get()->set_filter(loging::trivial::severity >= loging::trivial::trace);
 }
 
 void signalHandler(int) {
