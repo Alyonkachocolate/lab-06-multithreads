@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]) {
   size_t threadCount =
       argc < 2 ? std::thread::hardware_concurrency() : std::stoul(argv[1]);
-  outputFile = argc < 3 ? "../include/Hashes.json" : argv[2];
+  outputFile = argc < 3 ? "../Hash/Hashes.json" : argv[2];
   init();
   srand(time(NULL));
   std::signal(SIGINT, signalHandler);
